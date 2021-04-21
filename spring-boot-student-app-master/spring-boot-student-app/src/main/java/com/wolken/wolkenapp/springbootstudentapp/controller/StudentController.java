@@ -38,23 +38,40 @@ public class StudentController {
 		return new ResponseEntity<String>("Some error occurred!", HttpStatus.BAD_GATEWAY);
 	}
 	
+	@PostMapping("/saveall") 
+	public ResponseEntity<Integer> saveall(@RequestBody List<StudentEntity> studententityList) {
+		int result = service.validateAndSaveAll(studententityList);
+		if (result == 0) {
+			return new ResponseEntity<Integer>(result, HttpStatus.ACCEPTED);
+		}
+		return new ResponseEntity<Integer>(result, HttpStatus.BAD_REQUEST);
+	}
+	
 	@GetMapping("/getall")
 	public ResponseEntity<List<StudentEntity>> getAll() {
 		List<StudentEntity> list = service.getAll();
 		if (list != null) {
 			return new ResponseEntity<List<StudentEntity>>(list, HttpStatus.OK);
 		}
-		return new ResponseEntity<List<StudentEntity>>(list, HttpStatus.BAD_GATEWAY);
+		return new ResponseEntity<List<StudentEntity>>(list, HttpStatus.BAD_REQUEST);
 	}
 	
 	@PutMapping("/update")
-	public String update(@RequestBody StudentEntity entity) {
-		return service.updateByName(entity);
+	public ResponseEntity<String> update(@RequestBody StudentEntity entity) {
+		String message =  service.updateByName(entity);
+		if (!message.equals(null)) {
+			return new ResponseEntity<String>(message, HttpStatus.OK);
+		}
+		return new ResponseEntity<String>(message, HttpStatus.BAD_REQUEST);
 	}
 	
 	@DeleteMapping("/delete")
-	public String delete(String studentName) {
-		return service.deleteByName(studentName);
+	public ResponseEntity<String> delete(String studentName) {
+		String message =  service.deleteByName(studentName);
+		if (!message.equals(null)) {
+			return new ResponseEntity<String>(message, HttpStatus.OK);
+		}
+		return new ResponseEntity<String>(message, HttpStatus.BAD_REQUEST);
 	}
 	
 	@GetMapping("/getallbycollegecode")
@@ -67,7 +84,42 @@ public class StudentController {
 		
 	}
 	
-
+	@PutMapping("/updatestudentsemesterbystudentAddress")
+	public ResponseEntity<Boolean> UpdateStudentSemesterByStudentAddress(String studentAddress, Integer studentSemester) {
+		boolean isUpdated = service.validateAndUpdateStudentSemesterByStudentAddress(studentSemester, studentAddress);
+		if (isUpdated) {
+			return new ResponseEntity<Boolean>(isUpdated, HttpStatus.OK);
+		}
+		return new ResponseEntity<Boolean>(isUpdated, HttpStatus.BAD_REQUEST);
+	}
 	
+	@PutMapping("/updatestudentnamebystudentaddres")
+	public ResponseEntity<StudentEntity> UpdateStudentNameByStudentAddres(String studentName, String studentAddress) {
+		StudentEntity entity = service.validateAndUpdateStudentNameByStudentAddress(studentName, studentAddress);
+		if (entity != null) {
+			return new ResponseEntity<StudentEntity>(entity, HttpStatus.OK);
+		}
+		return new ResponseEntity<StudentEntity>(entity, HttpStatus.BAD_REQUEST);
+	}
+	
+	@GetMapping("/getallbystudentsemester")
+	public ResponseEntity<List<StudentEntity>> getAllByStudentSemester(Integer studentSemester) {
+		List<StudentEntity> studentlist = service.getAllByStudentSemester(studentSemester);
+		if (studentlist != null) {
+			return new ResponseEntity<List<StudentEntity>>(studentlist, HttpStatus.OK);
+		}
+		return new ResponseEntity<List<StudentEntity>>(studentlist, HttpStatus.BAD_REQUEST);
+	}
+
+	@PutMapping("/updatestudentsemesterandstudentaddressbystudentname")
+	public ResponseEntity<StudentEntity> updateStudentSemesterAndStudentAddressByStudentName(int studentSemester, String studentAddress,
+			String studentName) {
+		StudentEntity entity = service.updateStudentSemesterAndStudentAddressByStudentName(studentSemester, studentAddress, studentName);
+		if (entity != null) {
+			return new ResponseEntity<StudentEntity>(entity, HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<StudentEntity>(entity, HttpStatus.BAD_REQUEST);
+	}
 	 
 }

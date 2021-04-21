@@ -91,6 +91,56 @@ public class StudentServiceImpl implements StudentService{
 		}
 		return studentList;
 	}
+	@Override
+	public int validateAndSaveAll(List<StudentEntity> studententityList) {
+		// TODO Auto-generated method stub
+		try {
+			studentrepository.saveAll(studententityList);
+			return 1;
+		} catch(Exception e) {
+			return 0;
+		}
+		
+	}
+	@Override
+	public boolean validateAndUpdateStudentSemesterByStudentAddress(int studentSemester, String studentAddress) {
+		// TODO Auto-generated method stub
+		StudentEntity studententity = studentrepository.findByStudentAddress(studentAddress);
+		studententity.setStudentSemester(studentSemester);
+		try {
+			studentrepository.save(studententity);
+			return true;
+		} catch(Exception e) {
+			return false;
+		}
+		
+		
+	}
+	@Override
+	public StudentEntity validateAndUpdateStudentNameByStudentAddress(String studentName, String studentAddress) {
+		// TODO Auto-generated method stub
+		StudentEntity studententity = studentrepository.findByStudentAddress(studentAddress);
+		studententity.setStudentName(studentName);
+		StudentEntity entity = studentrepository.save(studententity);
+		return entity;
+	}
+	@Override
+	public List<StudentEntity> getAllByStudentSemester(int studentSemester) {
+		// TODO Auto-generated method stub
+		List<StudentEntity> studentlist = studentrepository.findByStudentSemester(studentSemester);
+		return studentlist;
+		
+	}
+	@Override
+	public StudentEntity updateStudentSemesterAndStudentAddressByStudentName(int studentSemester, String studentAddress,
+			String studentName) {
+		StudentEntity studententity = studentrepository.findByStudentName(studentName);
+		studententity.setStudentAddress(studentAddress);
+		studententity.setStudentSemester(studentSemester);
+		studentrepository.save(studententity);
+		// TODO Auto-generated method stub
+		return studententity;
+	}
 	
 	
 

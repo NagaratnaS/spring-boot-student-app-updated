@@ -12,4 +12,9 @@ public interface StudentService {
 	public String updateByName(StudentEntity entity);
 	public String deleteByName(String studentName);
 	public List<StudentEntity> getAllByCollegeName(String collegeCode);
+	public int validateAndSaveAll(List<StudentEntity> studententityList);
+	public boolean validateAndUpdateStudentSemesterByStudentAddress(int studentSemester, String studentAddress);
+	public StudentEntity validateAndUpdateStudentNameByStudentAddress(String studentName, String studentAddress);
+	public List<StudentEntity> getAllByStudentSemester(int studentSemester);
+	public StudentEntity updateStudentSemesterAndStudentAddressByStudentName(int studentSemester, String studentAddress, String studentName);
 }
